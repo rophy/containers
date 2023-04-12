@@ -1,0 +1,6 @@
+version: "3.9"
+services:
+  cstate:
+    image: rophy/cstate:ci-20230412
+    build:
+      context: cstate
