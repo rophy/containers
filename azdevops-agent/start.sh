@@ -75,6 +75,20 @@ trap 'cleanup; exit 143' TERM
 
 print_header "3. Configuring Azure Pipelines agent..."
 
+AZP_EXTRA_ARGS=
+if [ ! -z "$PROXY_URL" ]; then
+  AZP_EXTRA_ARGS="$AZP_EXTRA_ARGS --proxyurl ""$PROXY_URL"""
+  echo AZP_EXTRA_ARGS: $AZP_EXTRA_ARGS
+fi
+if [ ! -z "$PROXY_USERNAME" ]; then
+  AZP_EXTRA_ARGS="$AZP_EXTRA_ARGS --proxyusername ""$PROXY_USERNAME"""
+  echo AZP_EXTRA_ARGS: $AZP_EXTRA_ARGS
+fi
+if [ ! -z "$PROXY_PASSWORD" ]; then
+  AZP_EXTRA_ARGS="$AZP_EXTRA_ARGS --proxypassword ""$PROXY_PASSWORD"""
+  echo AZP_EXTRA_ARGS: $AZP_EXTRA_ARGS
+fi
+
 ./config.sh --unattended \
   --agent "${AZP_AGENT_NAME:-$(hostname)}" \
   --url "$AZP_URL" \
@@ -83,6 +97,7 @@ print_header "3. Configuring Azure Pipelines agent..."
   --pool "${AZP_POOL:-Default}" \
   --work "${AZP_WORK:-_work}" \
   --replace \
+  $AZP_EXTRA_ARGS \
   --acceptTeeEula & wait $!
 
 print_header "4. Running Azure Pipelines agent..."

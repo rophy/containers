@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   azdevops-agent:
-    image: rophy/azdevops-agent:20230520
+    image: rophy/azdevops-agent:20230521
     build:
       context: azdevops-agent
   cstate:
