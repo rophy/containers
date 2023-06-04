@@ -1,10 +1,10 @@
-FROM node:18.16.0-bullseye
+FROM node:18.16.0-alpine3.17
 
 WORKDIR /opt/cronicle/
 
 ENV CRONICLE_VERSION=0.9.23
 
-RUN apt-get update && apt-get install -y --no-install-recommends git curl bash
+RUN apk add --no-cache git curl bash procps jq yq ca-certificates
 
 RUN curl -sL "https://github.com/jhuckaby/Cronicle/archive/v${CRONICLE_VERSION}.tar.gz" | tar zxf - --strip-components 1 \
     && npm install \
