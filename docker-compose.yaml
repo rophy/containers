@@ -4,6 +4,10 @@ services:
     image: rophy/azdevops-agent:20230521
     build:
       context: azdevops-agent
+  cronicle:
+    image: rophy/cronicle:0.9.23-r0
+    build:
+      context: cronicle
   cstate:
     image: rophy/cstate:ci-20230412
     build:
