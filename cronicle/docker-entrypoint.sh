@@ -18,39 +18,32 @@ export CRONICLE_Storage__Filesystem__base_dir=${DATA_DIR}
 export CRONICLE_echo=1
 export CRONICLE_foreground=1
 
-if [ -z "${CRONICLE_master}" ]
+if [ ! -z "${CRONICLE_master}" ]
 then
-    echo "env var CRONICLE_master not set, starting cronicle in worker mode..."
-else
-    echo "env var CRONICLE_master is set, Starting cronicle in master mode..."
-    export HOSTNAME=master
-fi
+  export HOSTNAME=master
+  # Only run setup when setup needs to be done
+  if [ ! -f $DATA_DIR/.setup_done ]
+  then
+    $BIN_DIR/control.sh setup
 
+    # Create plugins directory
+    mkdir -p $PLUGINS_DIR
 
-# Only run setup when setup needs to be done
-if [ ! -f $DATA_DIR/.setup_done ]
-then
-  $BIN_DIR/control.sh setup
+    # Marking setup done
+    touch $DATA_DIR/.setup_done
+  fi
 
-  # Create plugins directory
-  mkdir -p $PLUGINS_DIR
-
-  # Marking setup done
-  touch $DATA_DIR/.setup_done
 fi
 
 # remove old lock file. resolves #9
 PID_FILE=$LOGS_DIR/cronicled.pid
 if [ -f "$PID_FILE" ]; then
-    echo "Removing old PID file: $PID_FILE"
-    rm -f $PID_FILE
+  echo "Removing old PID file: $PID_FILE"
+  rm -f $PID_FILE
 fi
 
 if [ -n "$1" ];
 then
-#   if [ "${1#-}" != "${1}" ] || [ -z "$(command -v "${1}")" ]; then
-#     set -- cronicle "$@"
-#   fi
   exec "$@"
 else
 #   exec su cronicle -c "/opt/cronicle/bin/control.sh start"
