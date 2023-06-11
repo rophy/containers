@@ -50,8 +50,14 @@ export VSO_AGENT_IGNORE=AZP_TOKEN,AZP_TOKEN_FILE
 
 print_header "1. Determining matching Azure Pipelines agent..."
 
+AZP_EXTRA_ARGS=
+if [ ! -z "$PROXY_URL" ]; then
+  AZP_EXTRA_ARGS="--proxyurl ""$PROXY_URL"""
+fi
+
 AZP_AGENT_PACKAGES=$(curl -LsS \
     -u user:$(cat "$AZP_TOKEN_FILE") \
+    $AZP_EXTRA_ARGS \
     -H 'Accept:application/json;' \
     "$AZP_URL/_apis/distributedtask/packages/agent?platform=$TARGETARCH&top=1")
 
@@ -65,7 +71,7 @@ fi
 
 print_header "2. Downloading and extracting Azure Pipelines agent..."
 
-curl -LsS $AZP_AGENT_PACKAGE_LATEST_URL | tar -xz & wait $!
+curl -LsS $AZP_EXTRA_ARGS $AZP_AGENT_PACKAGE_LATEST_URL | tar -xz & wait $!
 
 source ./env.sh
 
@@ -77,16 +83,7 @@ print_header "3. Configuring Azure Pipelines agent..."
 
 AZP_EXTRA_ARGS=
 if [ ! -z "$PROXY_URL" ]; then
-  AZP_EXTRA_ARGS="$AZP_EXTRA_ARGS --proxyurl ""$PROXY_URL"""
-  echo AZP_EXTRA_ARGS: $AZP_EXTRA_ARGS
-fi
-if [ ! -z "$PROXY_USERNAME" ]; then
-  AZP_EXTRA_ARGS="$AZP_EXTRA_ARGS --proxyusername ""$PROXY_USERNAME"""
-  echo AZP_EXTRA_ARGS: $AZP_EXTRA_ARGS
-fi
-if [ ! -z "$PROXY_PASSWORD" ]; then
-  AZP_EXTRA_ARGS="$AZP_EXTRA_ARGS --proxypassword ""$PROXY_PASSWORD"""
-  echo AZP_EXTRA_ARGS: $AZP_EXTRA_ARGS
+  AZP_EXTRA_ARGS="--proxyurl ""$PROXY_URL"""
 fi
 
 ./config.sh --unattended \

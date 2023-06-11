@@ -1,9 +1,5 @@
 version: "3.9"
 services:
-  azdevops-agent:
-    image: rophy/azdevops-agent:20230521
-    build:
-      context: azdevops-agent
   cronicle:
     image: rophy/cronicle:0.9.23-r2
     build:
