@@ -52,7 +52,7 @@ print_header "1. Determining matching Azure Pipelines agent..."
 
 AZP_EXTRA_ARGS=
 if [ ! -z "$PROXY_URL" ]; then
-  AZP_EXTRA_ARGS="--proxyurl ""$PROXY_URL"""
+  AZP_EXTRA_ARGS="--proxy ""$PROXY_URL"""
 fi
 
 AZP_AGENT_PACKAGES=$(curl -LsS \
