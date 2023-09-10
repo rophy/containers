@@ -8,6 +8,9 @@ plugins:
 - artifactId: "apache-httpcomponents-client-4-api"
   source:
     version: "4.5.14-208.v438351942757"
+- artifactId: "authentication-tokens"
+  source:
+    version: "1.53.v1c90fd9191a_b_"
 - artifactId: "bootstrap5-api"
   source:
     version: "5.3.0-1"
@@ -35,6 +38,9 @@ plugins:
 - artifactId: "commons-text-api"
   source:
     version: "1.10.0-78.v3e7b_ea_d5a_fe1"
+- artifactId: "configuration-as-code"
+  source:
+    version: "1700.v6f448841296e"
 - artifactId: "credentials"
   source:
     version: "1271.v54b_1c2c6388a_"
@@ -107,6 +113,15 @@ plugins:
 - artifactId: "junit"
   source:
     version: "1217.v4297208a_a_b_ce"
+- artifactId: "kubernetes"
+  source:
+    version: "4029.v5712230ccb_f8"
+- artifactId: "kubernetes-client-api"
+  source:
+    version: "6.8.1-224.vd388fca_4db_3b_"
+- artifactId: "kubernetes-credentials"
+  source:
+    version: "0.11"
 - artifactId: "ldap"
   source:
     version: "694.vc02a_69c9787f"
@@ -119,6 +134,9 @@ plugins:
 - artifactId: "matrix-project"
   source:
     version: "808.v5a_b_5f56d6966"
+- artifactId: "metrics"
+  source:
+    version: "4.2.18-442.v02e107157925"
 - artifactId: "mina-sshd-api-common"
   source:
     version: "2.10.0-69.v28e3e36d18eb_"
