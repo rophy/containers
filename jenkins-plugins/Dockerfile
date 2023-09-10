@@ -1,8 +1,6 @@
-FROM bitnami/java:17.0.8-7-debian-11-r49
-
-ADD https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.12.13/jenkins-plugin-manager-2.12.13.jar /jenkins/jenkins-plugin-manager.jar
-
+FROM jenkins/jenkins:2.422-alpine-jdk17 AS builder
 COPY plugins.yaml /usr/share/jenkins/plugins.yaml
+RUN jenkins-plugin-cli -f /usr/share/jenkins/plugins.yaml -d /usr/share/jenkins/ref/plugins
 
-ENV JENKINS_VERSION=2.422
-RUN java -jar /jenkins/jenkins-plugin-manager.jar -f /usr/share/jenkins/plugins.yaml -d /usr/share/jenkins/ref/plugins
+FROM scratch
+COPY --from=builder /usr/share/jenkins/ref/plugins /var/jenkins_home/plugins/
