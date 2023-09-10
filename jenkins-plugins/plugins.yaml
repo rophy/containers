@@ -1,0 +1,244 @@
+plugins:
+- artifactId: "ant"
+  source:
+    version: "497.v94e7d9fffa_b_9"
+- artifactId: "antisamy-markup-formatter"
+  source:
+    version: "162.v0e6ec0fcfcf6"
+- artifactId: "apache-httpcomponents-client-4-api"
+  source:
+    version: "4.5.14-208.v438351942757"
+- artifactId: "bootstrap5-api"
+  source:
+    version: "5.3.0-1"
+- artifactId: "bouncycastle-api"
+  source:
+    version: "2.29"
+- artifactId: "branch-api"
+  source:
+    version: "2.1128.v717130d4f816"
+- artifactId: "build-timeout"
+  source:
+    version: "1.31"
+- artifactId: "caffeine-api"
+  source:
+    version: "3.1.8-133.v17b_1ff2e0599"
+- artifactId: "checks-api"
+  source:
+    version: "2.0.1"
+- artifactId: "cloudbees-folder"
+  source:
+    version: "6.848.ve3b_fd7839a_81"
+- artifactId: "commons-lang3-api"
+  source:
+    version: "3.13.0-62.v7d18e55f51e2"
+- artifactId: "commons-text-api"
+  source:
+    version: "1.10.0-78.v3e7b_ea_d5a_fe1"
+- artifactId: "credentials"
+  source:
+    version: "1271.v54b_1c2c6388a_"
+- artifactId: "credentials-binding"
+  source:
+    version: "631.v861c06d062b_4"
+- artifactId: "display-url-api"
+  source:
+    version: "2.3.9"
+- artifactId: "durable-task"
+  source:
+    version: "523.va_a_22cf15d5e0"
+- artifactId: "echarts-api"
+  source:
+    version: "5.4.0-5"
+- artifactId: "email-ext"
+  source:
+    version: "2.100"
+- artifactId: "font-awesome-api"
+  source:
+    version: "6.4.0-2"
+- artifactId: "git"
+  source:
+    version: "5.2.0"
+- artifactId: "git-client"
+  source:
+    version: "4.4.0"
+- artifactId: "github"
+  source:
+    version: "1.37.3"
+- artifactId: "github-api"
+  source:
+    version: "1.314-431.v78d72a_3fe4c3"
+- artifactId: "github-branch-source"
+  source:
+    version: "1734.v8a_ed3a_653490"
+- artifactId: "gradle"
+  source:
+    version: "2.8.2"
+- artifactId: "instance-identity"
+  source:
+    version: "173.va_37c494ec4e5"
+- artifactId: "ionicons-api"
+  source:
+    version: "56.v1b_1c8c49374e"
+- artifactId: "jackson2-api"
+  source:
+    version: "2.15.2-350.v0c2f3f8fc595"
+- artifactId: "jakarta-activation-api"
+  source:
+    version: "2.0.1-3"
+- artifactId: "jakarta-mail-api"
+  source:
+    version: "2.0.1-3"
+- artifactId: "javax-activation-api"
+  source:
+    version: "1.2.0-6"
+- artifactId: "javax-mail-api"
+  source:
+    version: "1.6.2-9"
+- artifactId: "jaxb"
+  source:
+    version: "2.3.8-1"
+- artifactId: "jjwt-api"
+  source:
+    version: "0.11.5-77.v646c772fddb_0"
+- artifactId: "jquery3-api"
+  source:
+    version: "3.7.0-1"
+- artifactId: "junit"
+  source:
+    version: "1217.v4297208a_a_b_ce"
+- artifactId: "ldap"
+  source:
+    version: "694.vc02a_69c9787f"
+- artifactId: "mailer"
+  source:
+    version: "463.vedf8358e006b_"
+- artifactId: "matrix-auth"
+  source:
+    version: "3.2"
+- artifactId: "matrix-project"
+  source:
+    version: "808.v5a_b_5f56d6966"
+- artifactId: "mina-sshd-api-common"
+  source:
+    version: "2.10.0-69.v28e3e36d18eb_"
+- artifactId: "mina-sshd-api-core"
+  source:
+    version: "2.10.0-69.v28e3e36d18eb_"
+- artifactId: "okhttp-api"
+  source:
+    version: "4.11.0-157.v6852a_a_fa_ec11"
+- artifactId: "pam-auth"
+  source:
+    version: "1.10"
+- artifactId: "pipeline-build-step"
+  source:
+    version: "505.v5f0844d8d126"
+- artifactId: "pipeline-github-lib"
+  source:
+    version: "42.v0739460cda_c4"
+- artifactId: "pipeline-graph-analysis"
+  source:
+    version: "202.va_d268e64deb_3"
+- artifactId: "pipeline-groovy-lib"
+  source:
+    version: "685.v8ee9ed91d574"
+- artifactId: "pipeline-input-step"
+  source:
+    version: "477.v339683a_8d55e"
+- artifactId: "pipeline-milestone-step"
+  source:
+    version: "111.v449306f708b_7"
+- artifactId: "pipeline-model-api"
+  source:
+    version: "2.2144.v077a_d1928a_40"
+- artifactId: "pipeline-model-definition"
+  source:
+    version: "2.2144.v077a_d1928a_40"
+- artifactId: "pipeline-model-extensions"
+  source:
+    version: "2.2144.v077a_d1928a_40"
+- artifactId: "pipeline-rest-api"
+  source:
+    version: "2.33"
+- artifactId: "pipeline-stage-step"
+  source:
+    version: "305.ve96d0205c1c6"
+- artifactId: "pipeline-stage-tags-metadata"
+  source:
+    version: "2.2144.v077a_d1928a_40"
+- artifactId: "pipeline-stage-view"
+  source:
+    version: "2.33"
+- artifactId: "plain-credentials"
+  source:
+    version: "143.v1b_df8b_d3b_e48"
+- artifactId: "plugin-util-api"
+  source:
+    version: "3.3.0"
+- artifactId: "resource-disposer"
+  source:
+    version: "0.23"
+- artifactId: "scm-api"
+  source:
+    version: "676.v886669a_199a_a_"
+- artifactId: "script-security"
+  source:
+    version: "1275.v23895f409fb_d"
+- artifactId: "snakeyaml-api"
+  source:
+    version: "2.2-111.vc6598e30cc65"
+- artifactId: "ssh-credentials"
+  source:
+    version: "308.ve4497b_ccd8f4"
+- artifactId: "ssh-slaves"
+  source:
+    version: "2.916.vd17b_43357ce4"
+- artifactId: "structs"
+  source:
+    version: "325.vcb_307d2a_2782"
+- artifactId: "timestamper"
+  source:
+    version: "1.26"
+- artifactId: "token-macro"
+  source:
+    version: "384.vf35b_f26814ec"
+- artifactId: "trilead-api"
+  source:
+    version: "2.84.v72119de229b_7"
+- artifactId: "variant"
+  source:
+    version: "60.v7290fc0eb_b_cd"
+- artifactId: "workflow-aggregator"
+  source:
+    version: "596.v8c21c963d92d"
+- artifactId: "workflow-api"
+  source:
+    version: "1267.vd9b_a_ddd9eb_47"
+- artifactId: "workflow-basic-steps"
+  source:
+    version: "1042.ve7b_140c4a_e0c"
+- artifactId: "workflow-cps"
+  source:
+    version: "3787.v8f5dcd14a_fa_c"
+- artifactId: "workflow-durable-task-step"
+  source:
+    version: "1289.v4d3e7b_01546b_"
+- artifactId: "workflow-job"
+  source:
+    version: "1346.v180a_63f40267"
+- artifactId: "workflow-multibranch"
+  source:
+    version: "756.v891d88f2cd46"
+- artifactId: "workflow-scm-step"
+  source:
+    version: "415.v434365564324"
+- artifactId: "workflow-step-api"
+  source:
+    version: "639.v6eca_cd8c04a_a_"
+- artifactId: "workflow-support"
+  source:
+    version: "848.v5a_383b_d14921"
+- artifactId: "ws-cleanup"
+  source:
+    version: "0.45"
