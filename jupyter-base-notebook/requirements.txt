@@ -1,0 +1,3 @@
+jupyterhub==1.4.2
+nbgitpuller==0.10.1
+cqlsh==6.0.0
