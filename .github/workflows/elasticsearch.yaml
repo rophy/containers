@@ -44,5 +44,5 @@ jobs:
       with:
         context: ./elasticsearch
         dockerfile: ./elasticsearch/Dockerfile
-        push: false
+        push: true
         tags: rophy/elasticsearch:${{ env.VERSION }}
