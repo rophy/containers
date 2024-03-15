@@ -3,6 +3,9 @@ on:
   push:
     paths:
     - elasticsearch-a0/**
+  pull_request:
+    paths:
+    - elasticsearch-a0/**
 jobs:
   test:
     if: github.ref != 'refs/heads/main' || github.event_name == 'pull_request'
