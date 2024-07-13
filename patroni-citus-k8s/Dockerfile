@@ -1,6 +1,6 @@
 # https://github.com/patroni/patroni/blob/master/kubernetes/Dockerfile.citus
 
-FROM postgres:16.3-bullseye
+FROM postgres:16.3-bookworm
 LABEL maintainer="Alexander Kukushkin <akukushkin@microsoft.com>"
 
 RUN export DEBIAN_FRONTEND=noninteractive \
@@ -28,8 +28,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         && apt-get update -y \
         && apt-get -y install postgresql-16-citus-12.1; \
     fi \
-    && pip3 install setuptools \
-    && pip3 install 'git+https://github.com/patroni/patroni.git#egg=patroni[kubernetes]' \
+    && pip3 install --break-system-packages setuptools \
+    && pip3 install --break-system-packages 'git+https://github.com/patroni/patroni.git#egg=patroni[kubernetes]' \
     && PGHOME=/home/postgres \
     && mkdir -p $PGHOME \
     && chown postgres $PGHOME \
