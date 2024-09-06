@@ -1,3 +1,4 @@
-FROM scratch
+FROM busybox
 
-ADD https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.9.6/yesoreyeram-infinity-datasource-2.9.6.linux_amd64.zip /grafana/plugins/yesoreyeram-infinity-datasource-2.9.6.darwin_amd64.zip
+WORKDIR /grafana/plugins
+RUN wget https://github.com/grafana/grafana-infinity-datasource/releases/download/v2.9.6/yesoreyeram-infinity-datasource-2.9.6.linux_amd64.zip
