@@ -12,7 +12,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommend
     jq \
     lsb-release \
     software-properties-common \
-    python3-pip
+    python3-pip \
+    stunnel
 
 RUN pip3 install --upgrade certifi
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
