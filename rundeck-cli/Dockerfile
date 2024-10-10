@@ -10,4 +10,6 @@ RUN wget https://github.com/rundeck/rundeck-cli/releases/download/v2.0.8/rd-2.0.
     mv rd-2.0.8 /usr/local/rundeck-cli && \
     ln -s /usr/local/rundeck-cli/bin/rd /usr/local/bin/rd
 
+ENV DISABLE_WELCOME_MESSAGE=true
+
 CMD ["/bin/bash"]
