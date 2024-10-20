@@ -1,0 +1,29 @@
+diff --git a/hc/accounts/middleware.py b/hc/accounts/middleware.py
+index 4191402c..ef1bae7c 100644
+--- a/hc/accounts/middleware.py
++++ b/hc/accounts/middleware.py
+@@ -54,6 +54,9 @@ class CustomHeaderMiddleware(object):
+                 auth.logout(request)
+             return self.get_response(request)
+ 
++        # Normalizes email address to lower case for consistency with other places.
++        email = email.lower()
++
+         # If the user is already authenticated and that user is the user we are
+         # getting passed in the headers, then the correct user is already
+         # persisted in the session and we don't need to continue.
+diff --git a/hc/accounts/tests/test_remote_user_header_login.py b/hc/accounts/tests/test_remote_user_header_login.py
+index 3edc26b1..9a2f0778 100644
+--- a/hc/accounts/tests/test_remote_user_header_login.py
++++ b/hc/accounts/tests/test_remote_user_header_login.py
+@@ -22,6 +22,10 @@ class RemoteUserHeaderTestCase(BaseTestCase):
+         r = self.client.get("/accounts/profile/", AUTH_USER="alice@example.org")
+         self.assertContains(r, "alice@example.org")
+ 
++    def test_it_normalizes_case_sensitivity(self) -> None:
++        r = self.client.get("/accounts/profile/", AUTH_USER="AlIcE@eXaMpLe.OrG")
++        self.assertContains(r, "alice@example.org")
++
+     def test_it_does_nothing_when_header_not_set(self) -> None:
+         r = self.client.get("/accounts/profile/")
+         self.assertRedirects(r, "/accounts/login/?next=/accounts/profile/")
