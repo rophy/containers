@@ -1,4 +1,4 @@
-FROM amazon/aws-cli:2.22.32
+FROM amazon/aws-cli:2.27.1
 
 RUN mkdir -p /build && \
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.22.32.zip" -o "/build/awscliv2.zip"
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.27.1.zip" -o "/build/awscliv2.zip"
