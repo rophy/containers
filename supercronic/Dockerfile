@@ -11,3 +11,5 @@ RUN apk add --no-cache curl \
     && mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" \
     && ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic \
     && apk del curl
+
+ENTRYPOINT ["/usr/local/bin/supercronic"]
