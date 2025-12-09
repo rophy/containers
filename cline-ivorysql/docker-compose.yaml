@@ -1,0 +1,23 @@
+services:
+  ivorysql:
+    image: rophy/ivorysql:20251209-238856082c
+    environment:
+      IVORYSQL_PASSWORD: ivorypwd
+
+  oracle:
+    image: container-registry.oracle.com/database/free:23.26.0.0-lite
+    environment:
+      ORACLE_PWD: orapwd
+
+  cline:
+    build:
+      context: .
+    env_file: .env
+    volumes:
+      - .:/workspace
+      - cline:/home/node
+    working_dir: /workspace
+    command: ["sleep", "infinity"]
+
+volumes:
+  cline:
