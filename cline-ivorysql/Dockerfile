@@ -4,12 +4,16 @@ ARG INSTANT_CLIENT_VERSION=23.6.0.24.10
 ARG INSTANT_CLIENT_DIR=2360000
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    tini \
-    postgresql-client \
-    libaio1 \
-    wget \
-    unzip \
+    bash \
     ca-certificates \
+    curl \
+    gosu \
+    libaio1 \
+    passwd \
+    postgresql-client \
+    tini \
+    unzip \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /opt/oracle && cd /opt/oracle \
@@ -26,6 +30,10 @@ ENV PATH=$PATH:$ORACLE_HOME
 
 RUN npm install -g cline
 
-ENTRYPOINT ["/usr/bin/tini", "--"]
+COPY AGENT.md /AGENT.md
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 
 CMD ["cline"]
