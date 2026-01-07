@@ -1,0 +1,99 @@
+name: Container Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      changed_folder: ${{ steps.check.outputs.folder }}
+      should_build: ${{ steps.check.outputs.should_build }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed root folders
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # For PRs: compare against base branch
+            CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+          else
+            # For push to main: check only the latest commit
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+          fi
+
+          # Extract unique root folders (excluding hidden folders and files at root)
+          CHANGED_FOLDERS=$(echo "$CHANGED_FILES" | grep '/' | cut -d'/' -f1 | grep -v '^\.' | sort -u)
+          FOLDER_COUNT=$(echo "$CHANGED_FOLDERS" | grep -c . || true)
+
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+          echo ""
+          echo "Changed root folders:"
+          echo "$CHANGED_FOLDERS"
+          echo "Count: $FOLDER_COUNT"
+
+          if [ "$FOLDER_COUNT" -eq 0 ]; then
+            echo "No container folders changed"
+            echo "should_build=false" >> $GITHUB_OUTPUT
+            exit 0
+          elif [ "$FOLDER_COUNT" -gt 1 ]; then
+            echo "::error::Multiple root folders changed ($FOLDER_COUNT). Each PR/commit should only modify one container image."
+            echo "Changed folders: $CHANGED_FOLDERS"
+            exit 1
+          else
+            FOLDER=$(echo "$CHANGED_FOLDERS" | head -1)
+            echo "folder=$FOLDER" >> $GITHUB_OUTPUT
+            echo "should_build=true" >> $GITHUB_OUTPUT
+            echo "Will build: $FOLDER"
+          fi
+
+  build:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.should_build == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/containers/${{ needs.detect-changes.outputs.changed_folder }}
+          tags: |
+            type=ref,event=pr
+            type=raw,value={{date 'YYYYMMDD'}}-{{sha}},enable=${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./${{ needs.detect-changes.outputs.changed_folder }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
