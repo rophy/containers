@@ -5,4 +5,4 @@ RUN bin/elasticsearch-plugin install --batch \
         analysis-kuromoji \
         ingest-attachment \
         repository-s3 \
-        https://get.infini.cloud/elasticsearch/analysis-ik/8.18.2
+        https://get.infini.cloud/elasticsearch/analysis-ik/8.18.8
