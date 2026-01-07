@@ -1,4 +1,4 @@
-FROM elasticsearch:8.18.2
+FROM elasticsearch:8.18.8
 
 RUN bin/elasticsearch-plugin install --batch \
         analysis-icu \
