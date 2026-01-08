@@ -9,7 +9,7 @@ trap 'rm -rf -- "$tmpdir"' EXIT
 
 cat <<EOF > "${tmpdir}/Dockerfile"
 # You can customize image here.
-FROM rophy/cline-cli:20260108-r1
+FROM rophy/containers/cline
 EOF
 
 docker build -t cline "${tmpdir}"
