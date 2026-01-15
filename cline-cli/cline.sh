@@ -2,14 +2,22 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+IMAGE_NAME="cline-cli:latest"
+
+# Build base image if it doesn't exist
+if ! docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
+  echo "Image $IMAGE_NAME not found, building..."
+  docker build -t "$IMAGE_NAME" "$SCRIPT_DIR"
+fi
+
 # https://stackoverflow.com/a/687052
 tmpdir="$(mktemp -d)"
 trap 'rm -rf -- "$tmpdir"' EXIT
 
-
 cat <<EOF > "${tmpdir}/Dockerfile"
 # You can customize image here.
-FROM rophy/containers/cline
+FROM ${IMAGE_NAME}
 EOF
 
 docker build -t cline "${tmpdir}"
@@ -28,4 +36,3 @@ docker run --rm -it \
   -v "${WORKDIR}:${WORKDIR}" \
   --workdir="${WORKDIR}" \
   cline
-

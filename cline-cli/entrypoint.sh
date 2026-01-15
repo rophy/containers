@@ -12,5 +12,6 @@ groupmod --gid ${HOST_GID} ${TARGET_USER}
 usermod --uid ${HOST_UID} --gid ${HOST_GID} ${TARGET_USER}
 groupmod -g ${DOCKER_GID} docker
 
+echo "Run 'cline' to start the Cline CLI."
 exec gosu ${TARGET_USER} "$@"
 

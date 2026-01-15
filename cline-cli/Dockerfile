@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     curl \
     gosu \
+    sudo \
     tini \
     && rm -rf /var/lib/apt/lists/*
 
@@ -17,10 +18,11 @@ RUN curl -fsSL https://download.docker.com/linux/debian/dists/bookworm/pool/stab
 RUN usermod -l cline -d /home/cline -m node \
     && groupmod -n cline node \
     && groupadd docker \
-    && usermod -aG docker cline
+    && usermod -aG docker,sudo cline \
+    && echo 'cline ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/cline
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 
-CMD ["cline"]
+CMD ["bash"]
