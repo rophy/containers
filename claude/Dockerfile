@@ -12,8 +12,10 @@ RUN apt-get update && \
       gosu \
       jq \
       less \
+      make \
       man-db \
       nano \
+      openssh-client \
       procps \
       python3 \
       python3-jinja2 \
@@ -55,6 +57,11 @@ RUN curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tm
     unzip -q /tmp/awscliv2.zip -d /tmp && \
     /tmp/aws/install && \
     rm -rf /tmp/aws /tmp/awscliv2.zip
+
+# terraform
+RUN curl -fsSL "https://releases.hashicorp.com/terraform/1.14.3/terraform_1.14.3_linux_amd64.zip" -o terraform.zip && \
+    unzip -q terraform.zip -d /usr/local/bin && \
+    rm terraform.zip
 
 # kind
 RUN curl -fsSL "https://github.com/kubernetes-sigs/kind/releases/latest/download/kind-linux-amd64" -o /usr/local/bin/kind && \

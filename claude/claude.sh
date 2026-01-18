@@ -10,6 +10,7 @@ DOCKER_GID=$(getent group docker | cut -d: -f3)
 WORKDIR=$(pwd)
 
 docker run --rm -it \
+  -e DEV_CONTAINER=true \
   -e HOST_UID=${HOST_UID} \
   -e HOST_GID=${HOST_GID} \
   -e DOCKER_GID=${DOCKER_GID} \
