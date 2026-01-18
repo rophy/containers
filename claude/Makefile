@@ -7,4 +7,4 @@ build: ## Build docker image tagged claude:latest
 	docker build -t claude:latest .
 
 install: ## Install claude.sh to /usr/local/bin/
-	install -m 755 claude.sh /usr/local/bin/claude.sh
+	sudo install -m 755 claude.sh /usr/local/bin/claude.sh
