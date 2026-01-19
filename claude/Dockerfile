@@ -72,7 +72,7 @@ RUN curl -fsSL "https://github.com/kubernetes/minikube/releases/latest/download/
     chmod +x /usr/local/bin/minikube
 
 # claude
-RUN npm install -g @anthropic-ai/claude-code
+RUN npm install -g @anthropic-ai/claude-code happy-coder
 
 # rename "node" user to "claude"
 RUN usermod -l claude -d /home/claude -m node \

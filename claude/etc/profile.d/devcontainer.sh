@@ -9,12 +9,12 @@ set_prompt() {
 }
 PROMPT_COMMAND=set_prompt
 
-# Aliases
-alias claude="claude --dangerously-skip-permissions"
-alias dc="docker compose"
-
 # Enable bash-completion
 if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
 fi
+
+# Common aliases
+alias claude="claude --dangerously-skip-permissions"
+alias happy="happy --dangerously-skip-permissions"
 
