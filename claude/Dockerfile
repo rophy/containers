@@ -71,6 +71,12 @@ RUN curl -fsSL "https://github.com/kubernetes-sigs/kind/releases/latest/download
 RUN curl -fsSL "https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64" -o /usr/local/bin/minikube && \
     chmod +x /usr/local/bin/minikube
 
+# github cli
+RUN curl -fsSL "https://github.com/cli/cli/releases/download/v2.86.0/gh_2.86.0_linux_amd64.tar.gz" | tar xz -C /tmp && \
+    mv /tmp/gh_2.86.0_linux_amd64/bin/gh /usr/local/bin/gh && \
+    chmod +x /usr/local/bin/gh && \
+    rm -rf /tmp/gh_2.86.0_linux_amd64
+
 # claude
 RUN npm install -g @anthropic-ai/claude-code happy-coder
 
