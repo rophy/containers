@@ -78,7 +78,7 @@ RUN curl -fsSL "https://github.com/cli/cli/releases/download/v2.86.0/gh_2.86.0_l
     rm -rf /tmp/gh_2.86.0_linux_amd64
 
 # claude
-RUN npm install -g @anthropic-ai/claude-code happy-coder
+RUN npm install -g @anthropic-ai/claude-code happy-coder cline
 
 # rename "node" user to "claude"
 RUN usermod -l claude -d /home/claude -m node \
