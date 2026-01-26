@@ -6,12 +6,13 @@ set -e
 HOST_UID=${HOST_UID:-1000}
 HOST_GID=${HOST_GID:-1000}
 DOCKER_GID=${DOCKER_GID:-999}
-TARGET_USER="claude"
+GOSU_USER=${GOSU_USER:-claude}
+WELCOME_MSG=${WELCOME_MSG:-"Run 'claude' to start Claude Code."}
 
-groupmod --gid ${HOST_GID} ${TARGET_USER}
-usermod --uid ${HOST_UID} --gid ${HOST_GID} ${TARGET_USER}
-groupmod -g ${DOCKER_GID} docker
+groupmod --gid ${HOST_GID} ${GOSU_USER} > /dev/null
+usermod --uid ${HOST_UID} --gid ${HOST_GID} ${GOSU_USER} > /dev/null
+groupmod -g ${DOCKER_GID} docker > /dev/null
 
-echo "Run 'claude' to start Claude Code."
-exec gosu ${TARGET_USER} "$@"
+echo "${WELCOME_MSG}"
+exec gosu ${GOSU_USER} "$@"
 
