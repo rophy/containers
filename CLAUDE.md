@@ -1,5 +1,9 @@
 # Claude Code Guidelines
 
+## Project Overview
+
+See `README.md` for repo structure, local build instructions, and CI/CD pipeline details (registry, tagging, PR rules).
+
 ## Git Policies
 
 - Prefix commit messages with: feat, fix, test, chore, docs, refactor
