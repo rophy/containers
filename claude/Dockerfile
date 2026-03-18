@@ -40,7 +40,8 @@ RUN install -m 0755 -d /etc/apt/keyrings && \
       docker-buildx-plugin \
       docker-ce-cli \
       docker-compose-plugin \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -s /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
 
 # kubectl
 RUN curl -fsSL "https://dl.k8s.io/release/v1.35.0/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl && \
