@@ -16,5 +16,4 @@ fi
 
 # Common aliases
 alias claude="claude --dangerously-skip-permissions"
-alias happy="happy --dangerously-skip-permissions"
 

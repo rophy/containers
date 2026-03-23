@@ -9,7 +9,6 @@ A dev container for AI-assisted development, bundling Claude Code and related to
 | Tool | Version |
 |------|---------|
 | claude-code | latest |
-| happy-coder | latest |
 | cline | 2.8.1 |
 
 ### DevOps Toolchain
@@ -72,5 +71,4 @@ docker run --rm -it \
 The following aliases are configured in interactive login shells:
 
 - `claude` → `claude --dangerously-skip-permissions`
-- `happy` → `happy --dangerously-skip-permissions`
 - `docker-compose` is symlinked to `docker compose`
