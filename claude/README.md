@@ -24,6 +24,20 @@ A dev container for AI-assisted development, bundling Claude Code and related to
 | minikube | latest |
 | GitHub CLI | 2.86.0 |
 
+## Prebuilt Image
+
+Prebuilt images are available at:
+
+```
+ghcr.io/rophy/containers/claude
+```
+
+Tags follow the format `YYYYMMDD-<commit-sha>`. Pull the latest with:
+
+```sh
+docker pull ghcr.io/rophy/containers/claude:<tag>
+```
+
 ## Quick Start
 
 ### Build
