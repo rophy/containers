@@ -7,7 +7,6 @@ RUN dnf install -y epel-release \
       vim \
       less \
       # performance & benchmarking
-      fio \
       sysstat \
       iotop \
       perf \
