@@ -1,0 +1,45 @@
+services:
+  oracle:
+    image: gvenzl/oracle-xe:21.3.0-slim-faststart
+    environment:
+      ORACLE_PASSWORD: testpass
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  postgres:
+    image: postgres:16-bookworm
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpass
+      POSTGRES_DB: testdb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U testuser -d testdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  yugabytedb:
+    image: yugabytedb/yugabyte:2025.2.2.1-b1
+    hostname: yugabytedb
+    command: bin/yugabyted start --daemon=false
+    healthcheck:
+      test: ["CMD", "postgres/bin/pg_isready", "-h", "yugabytedb", "-p", "5433"]
+      interval: 10s
+      timeout: 5s
+      start_period: 120s
+      retries: 30
+
+  k6:
+    build: .
+    depends_on:
+      oracle:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      yugabytedb:
+        condition: service_healthy
+    volumes:
+      - ./scripts:/scripts
