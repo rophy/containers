@@ -1,4 +1,4 @@
-FROM grafana/grafana-oss:13.0.1-ubuntu
+FROM grafana-oss-custom:main-3b7b8bb7ed
 
 ENV GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=victoriametrics-logs-datasource
 
