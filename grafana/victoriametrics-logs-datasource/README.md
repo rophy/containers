@@ -1,0 +1,288 @@
+# VictoriaLogs datasource for Grafana
+
+The [VictoriaLogs Grafana plugin](https://grafana.com/grafana/plugins/victoriametrics-logs-datasource/) allows Grafana 
+to query, visualize, and interact with [VictoriaLogs](https://docs.victoriametrics.com/victorialogs/),
+a high-performance log storage and processing system.
+
+<img alt="Grafana Dashboard Screenshot" width="100%" src="https://github.com/VictoriaMetrics/victorialogs-datasource/blob/main/src/img/dashboard.png?raw=true">
+
+## Capabilities
+
+1. Use [LogsQL](https://docs.victoriametrics.com/victorialogs/logsql/) to filter, aggregate, and transform logs data to gain insights into application behavior.
+1. Use Explore mode with Grafana.
+1. Show live-streaming logs.
+1. Build dashboards and setup alerts.
+1. Use Ad Hoc filters.
+
+Try it at [VictoriaMetrics playground](https://play-grafana.victoriametrics.com/d/be5zidev72m80f/k8s-logs-demo)!
+
+## Installation
+
+For detailed instructions on how to install the plugin on Grafana Cloud or locally, please checkout the [Plugin installation docs](https://grafana.com/docs/grafana/latest/plugins/installation/).
+For installation options in Docker or Kubernetes refer to [these docs](https://github.com/VictoriaMetrics/victorialogs-datasource?tab=readme-ov-file#installation).
+
+## Multitenancy configuration
+
+VictoriaLogs datasource supports [multitenancy](https://docs.victoriametrics.com/victorialogs/#multitenancy) via `multitenancyHeaders` datasource configuration option. 
+To configure it, set AccountID and ProjectID in the `multitenancyHeaders` section.
+
+<img alt="Multitenancy configuration" src="https://github.com/VictoriaMetrics/victorialogs-datasource/blob/main/src/img/multitenancy_configuration.png?raw=true">
+
+### Manual configuration via UI
+
+Once the plugin is installed on your Grafana instance, follow [these instructions](https://grafana.com/docs/grafana/latest/datasources/add-a-data-source/)
+to add a new VictoriaLogs data source, and enter configuration options.
+
+### Configuration via file
+
+Provisioning of Grafana plugin requires creating [datasource config file](http://docs.grafana.org/administration/provisioning/#datasources):
+
+```yaml
+apiVersion: 1
+datasources:
+  - name: VictoriaLogs
+    type: victoriametrics-logs-datasource
+    access: proxy
+    url: http://victorialogs:9428
+    isDefault: true
+    jsonData:
+      # Multitenancy settings, see https://docs.victoriametrics.com/victorialogs/#multitenancy
+      # to use the multitenancy, uncomment lines below: AccountID and ProjectID
+      multitenancyHeaders:
+        #AccountID: 0
+        #ProjectID: 0
+```
+
+## Building queries
+
+VictoriaLogs query language is [LogsQL](https://docs.victoriametrics.com/victorialogs/logsql/).
+Queries can be built using raw LogsQL or via QueryBuilder.
+
+See panels examples at [VictoriaMetrics playground](https://play-grafana.victoriametrics.com/d/be5zidev72m80f/k8s-logs-demo)
+and LogsQL examples [here](https://docs.victoriametrics.com/victorialogs/logsql-examples/).
+
+### Logs panel
+
+For using [Logs panel](https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/logs/)
+switch to `Raw Logs` query type:
+
+<img alt="Logs panel" src="https://github.com/VictoriaMetrics/victorialogs-datasource/blob/main/src/img/panel_logs.png?raw=true">
+
+### Time series panel
+
+For using [Time series panel](https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/time-series/)
+switch to `Range` query type:
+
+<img alt="Time series panel" src="https://github.com/VictoriaMetrics/victorialogs-datasource/blob/main/src/img/panel_time_series.png?raw=true">
+
+### Stats panel
+
+For using [Stats panel](https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/stat/)
+switch to `Instant` query type:
+
+<img alt="Stats panel" src="https://github.com/VictoriaMetrics/victorialogs-datasource/blob/main/src/img/panel_stat.png?raw=true">
+
+For enabling background visualization switch to `Range` query type.
+
+### Table panel
+
+For using [Table panel](https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/table/)
+switch to `Raw Logs` query type:
+
+<img alt="Table panel" src="https://github.com/VictoriaMetrics/victorialogs-datasource/blob/main/src/img/panel_table.png?raw=true">
+
+And apply `Transformations` by labels:
+
+<img alt="Transformations" src="https://github.com/VictoriaMetrics/victorialogs-datasource/blob/main/src/img/panel_table_transformation.png?raw=true">
+
+### Heatmap panel
+For using [Heatmap panel](https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/heatmap/)
+switch to `Range` query type and use [`histogram` stats function](https://docs.victoriametrics.com/victorialogs/logsql/#histogram-stats). Use the step to adjust the granularity of the heatmap.
+Query example:
+```logsql
+{collector="otel-collector", k8s.namespace.name="play-otel", service.name="checkout"} "duration:" 
+  | extract "duration: <duration>" 
+  | stats histogram(duration)
+```
+<img alt="Heatmap panel" width="100%" src="https://github.com/VictoriaMetrics/victorialogs-datasource/blob/main/src/img/panel_heatmap.png?raw=true">
+
+### Log level rules
+
+The **Log level rules** section in the datasource configuration allows you to assign log levels based on custom field conditions. This helps classify logs dynamically (e.g., as `error`, `info`, `debug`, etc.) using rules you define.
+
+#### How to use
+
+1. Open the datasource settings.
+
+2. Scroll to the **Log level rules** section.
+
+3. Click **"Add rule"** to define a new rule.
+
+4. For each rule, configure the following:
+
+    * **Enable switch** – enable or disable the rule.
+    * **Field name** – the log field the condition will evaluate.
+    * **Operator** – choose from: `Equals`, `Not equal`, `Matches regex`, `Less than`, `Greater than`
+    * **Value** – the value to compare the field against.
+    * **Log level** – level to assign if the condition matches: `critical`, `warning`, `error`, `info`, `debug`, `trace`, `unknown`
+    * **Delete button** – remove the rule.
+
+5.  After adding or editing rules, click **"Save & test"** to apply the changes.
+
+**Rule priority**: If multiple rules match a log entry, the **first matching rule** (top to bottom) takes precedence.
+
+6. To define rules via the provision file, use the following format of the provision file:
+
+```yaml
+apiVersion: 1
+datasources:
+  # <string, required> Name of the VictoriaLogs datasource
+  # displayed in Grafana panels and queries.
+  - name: VictoriaLogs
+    # <string, required> Sets the data source type.
+    type: victoriametrics-logs-datasource
+    # <string, required> Sets the access mode, either
+    # proxy or direct (Server or Browser in the UI).
+    access: proxy
+    # <string> Sets URL for sending queries to VictoriaLogs server.
+    # see https://docs.victoriametrics.com/victorialogs/querying/
+    url: https://play-vmlogs.victoriametrics.com
+    # <string> Sets the pre-selected datasource for new panels.
+    # You can set only one default data source per organization.
+    isDefault: true
+    jsonData:
+      logLevelRules:
+        - field: "_stream_id"
+          value: "123123"
+          level: "error"
+          operator: "regex"
+          enabled: true
+```
+Where:
+* `field` is the name of the log field to evaluate (e.g. `_stream_id`, `status_code`, `message`).
+* `value` is the value to compare against. Can be a string or a number, depending on the field.
+* `level` is the log level to assign if the condition matches. Valid values: `critical`, `error`, `warning`, `info`, `debug`, `trace`, `unknown`.
+* `operator` is the comparison operator to use, such as `equals`, `notEquals`, `regex`, `lessThan`, `greaterThan`.
+* `enabled` is a boolean flag to enable or disable the rule. Defaults to `true` if omitted.
+
+### Variables
+VictoriaLogs datasource supports [variables](https://grafana.com/docs/grafana/latest/variables/) in queries.
+
+#### Ad Hoc filter
+You can use [Ad Hoc filters](https://grafana.com/docs/grafana/latest/visualizations/dashboards/variables/add-template-variables/#add-ad-hoc-filters) to filter logs in Dashboards.
+Ad Hoc filters are applied to all panels in the Dashboard as [extra_filters](https://docs.victoriametrics.com/victorialogs/querying/#extra-filters) query parameter. If you navigate to the Explore page from the Dashboard, Ad Hoc filters are also applied there.
+<img alt="Ad hoc filters" src="https://github.com/VictoriaMetrics/victorialogs-datasource/blob/main/src/img/extra_filters_explore_page.png?raw=true">
+
+
+#### Word filter
+If you want to filter logs by a specific word or phrase, you can use [word filter](https://docs.victoriametrics.com/victorialogs/logsql/#word-filter).
+To do this, you need to create a [text box variable](https://grafana.com/docs/grafana/latest/visualizations/dashboards/variables/add-template-variables/#add-a-text-box-variable).
+After it is created, you need to add this to the query: `<q> | $word_filter`. Type any word or phrase you want to look for. Set to "*" to not filter. By default, the given word is searched in the _msg field.
+<img alt="Word filter" src="https://github.com/VictoriaMetrics/victorialogs-datasource/blob/main/src/img/word_filter.png?raw=true">
+
+#### Variable interpolation
+
+VictoriaLogs datasource supports automatic variable interpolation with the following rules:
+
+**1. Field Value Variables:**
+- `field:$var` → `field:in("v1", ..., "vN")`
+- `field:=$var` → `field:in("v1", ..., "vN")`
+- Values are quoted and escaped
+- Empty values or "All" expand to `in(*)`
+
+**2. Function Contexts:**
+- `in($var)` and `contains_any($var)` expand to quoted lists
+- Values maintain proper quoting within function calls
+
+**3. Inequality Operators in filters:**
+- `field:!$var` → `!field:in("v1", ..., "vN")`
+- `field:!=$var` → `!field:in("v1", ..., "vN")`
+
+**4. Stream Filters:**
+- `{tag=$var}` → `{tag in(...)}`
+- `{field!=$var}` → `{field not_in(...)}`
+
+**5. Restrictions:**
+- Avoid using variables as values in regexp filters (e.g., `field:~$var`), in this case, you will get a warning message
+- Invalid usage will show an error message
+
+## Correlations
+
+Signals can be correlated together if they share the same list of attributes, so they can uniquely identify the
+same system or event. Grafana provides various interfaces for the [correlations](https://grafana.com/docs/grafana/latest/administration/correlations/)
+feature for interactive links between visualizations.
+
+### Trace to logs
+
+Tempo, Jaeger, and Zipkin data sources support [Trace to logs](https://grafana.com/docs/grafana/latest/explore/trace-integration/#trace-to-logs)
+feature for navigating from a span in a trace directly to logs relevant for that span. _(Supported since Grafana v12.2.0)_.
+
+<img alt="Derived fields configuration" width="100%" src="https://github.com/VictoriaMetrics/victorialogs-datasource/blob/main/src/img/trace_to_logs.png?raw=true">
+
+An example of the correlation query in traces datasource is the following:
+```
+trace_id:="${__trace.traceId}" AND span_id:="${__span.spanId}"
+```
+
+### Log to metrics
+
+Log to traces correlation is possible via Derived Fields functionality. But for it to work log entries and time series
+in metrics datasource should share common labels that could be used as filters. See example of building logs to metrics
+correlation in [this issue](https://github.com/VictoriaMetrics/VictoriaMetrics/issues/9592#issuecomment-3202104607).
+
+### Log to traces
+
+Log to traces correlation is possible via Derived Fields functionality. See its description in the sections below.
+
+## OpenTelemetry preset
+
+The **OpenTelemetry preset** in the datasource configuration automatically sets up [Derived Fields](#derived-fields) for trace IDs and [Log level rules](#log-level-rules) for OTel severity — without manual configuration.
+
+### How to enable
+
+1. Open the datasource settings.
+2. Scroll to the **OpenTelemetry preset** section.
+3. Toggle **Enable OpenTelemetry preset**.
+4. Click **Save & test** to save your datasource URL first if you have not done so — the preset needs a reachable VictoriaLogs backend to detect the field format.
+
+### What gets auto-detected
+
+After enabling the preset, the datasource queries recent logs to detect:
+
+* **Field format** — `snake_case` (`trace_id`) or `camelCase` (`traceId`).
+* **Severity field** — the first matching candidate among `severity_text`, `SeverityText`, `severity`, `Severity`.
+* **Severity value case** — whether the severity field contains `UPPERCASE`, `lowercase`, or mixed values, to generate the correct number of log level rules.
+
+The detected configuration is shown in the UI. Your manually created derived fields and log level rules are preserved.
+
+### Traces datasource
+
+Select an optional **Traces datasource** (Tempo, Jaeger, Zipkin) to make the generated `trace_id` derived field link directly to the matching trace.
+
+### Changing the severity field
+
+If the auto-detected severity field is wrong, click **Change** next to the severity row to pick a different field from the dropdown. The preset will re-run detection using the selected field.
+
+## Derived Fields
+
+In VictoriaLogs datasource settings, you can configure rules of extracting values from a log message to create a link with that value.
+
+For example, if log entries have field `trace_id` then we can configure a Derived Field to make a link to Jaeger datasource
+for viewing an associated trace:
+
+<img alt="Derived fields configuration" width="100%" src="https://github.com/VictoriaMetrics/victorialogs-datasource/blob/main/src/img/derived_fields_cfg.png?raw=true">
+
+Once configured, in Explore mode or in Logs panel log entries with field `trace_id` will also get a link that would
+open a Jaeger datasource and search for the `trace_id` value:
+
+<img alt="Derived fields explore" src="https://github.com/VictoriaMetrics/victorialogs-datasource/blob/main/src/img/derived_fields_explore.png?raw=true">
+
+If the trace ID is not stored in a separate field but in a log message itself, then use `Regex in log line` option
+to specify a regex expression for extracting the trace value from log message.
+
+Learn more about [Derived Fields in Grafana](https://grafana.com/docs/grafana/next/datasources/loki/configure-loki-data-source/#derived-fields).
+
+## License
+
+This project is licensed under
+the [Apache 2.0 license](https://github.com/VictoriaMetrics/victorialogs-datasource/blob/main/LICENSE).
