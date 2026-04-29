@@ -1,4 +1,4 @@
-FROM grafana-oss-custom:main-3b7b8bb7ed
+FROM ghcr.io/rophy/grafana:13.1.0-e1811af7
 
 ENV GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=victoriametrics-logs-datasource
 
