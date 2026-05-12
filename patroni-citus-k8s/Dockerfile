@@ -1,6 +1,6 @@
 # https://github.com/patroni/patroni/blob/master/kubernetes/Dockerfile.citus
 
-FROM postgres:16.3-bookworm
+FROM postgres:16.13-trixie
 LABEL maintainer="Alexander Kukushkin <akukushkin@microsoft.com>"
 
 RUN export DEBIAN_FRONTEND=noninteractive \
@@ -26,7 +26,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         echo "deb [signed-by=/etc/apt/trusted.gpg.d/citusdata_community.gpg] https://packagecloud.io/citusdata/community/debian/ $(lsb_release -cs) main" > /etc/apt/sources.list.d/citusdata_community.list \
         && curl -sL https://packagecloud.io/citusdata/community/gpgkey | gpg --dearmor > /etc/apt/trusted.gpg.d/citusdata_community.gpg \
         && apt-get update -y \
-        && apt-get -y install postgresql-16-citus-12.1; \
+        && apt-get -y install postgresql-16-citus-13.2; \
     fi \
     && pip3 install --break-system-packages setuptools \
     && pip3 install --break-system-packages 'git+https://github.com/patroni/patroni.git#egg=patroni[kubernetes]' \
