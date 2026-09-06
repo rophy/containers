@@ -65,5 +65,7 @@ jobs:
 
       - name: Build and push
         run: |
-          docker build -t ${{ fromJSON(steps.meta.outputs.json).tags[0] }} ubuntu-tvm/
-          docker push ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
+          docker buildx build \
+            --tag ${{ fromJSON(steps.meta.outputs.json).tags[0] }} \
+            --output type=image,push=true,oci-mediatypes=true \
+            ubuntu-tvm/
