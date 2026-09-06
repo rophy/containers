@@ -66,6 +66,7 @@ jobs:
       - name: Build and push
         run: |
           docker buildx build \
+            --platform linux/amd64 \
             --tag ${{ fromJSON(steps.meta.outputs.json).tags[0] }} \
             --output type=image,push=true,oci-mediatypes=true \
             ubuntu-tvm/
