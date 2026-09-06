@@ -1,0 +1,68 @@
+name: Ubuntu TVM Build
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ubuntu-tvm/**
+
+jobs:
+  build:
+    runs-on: [self-hosted, macOS, ARM64]
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Setup environment
+        run: |
+          eval "$(/opt/homebrew/bin/brew shellenv)"
+          echo "PATH=$PATH" >> "$GITHUB_ENV"
+          echo "DOCKER_HOST=unix://$HOME/.colima/docker.sock" >> "$GITHUB_ENV"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Export Tart VM
+        run: |
+          CACHE_DIR="$HOME/.cache/ubuntu-tvm"
+          mkdir -p "$CACHE_DIR"
+
+          REMOTE_DIGEST=$(crane digest ghcr.io/cirruslabs/ubuntu:24.04)
+          CACHED_DIGEST=""
+          if [ -f "$CACHE_DIR/digest" ]; then
+            CACHED_DIGEST=$(cat "$CACHE_DIR/digest")
+          fi
+
+          if [ "$REMOTE_DIGEST" = "$CACHED_DIGEST" ] && [ -f "$CACHE_DIR/ubuntu-24.04.tvm" ]; then
+            echo "Upstream unchanged ($REMOTE_DIGEST), using cached .tvm"
+          else
+            echo "Upstream changed: ${CACHED_DIGEST:-none} -> $REMOTE_DIGEST"
+            tart delete ubuntu-export 2>/dev/null || true
+            tart clone ghcr.io/cirruslabs/ubuntu:24.04 ubuntu-export
+            tart export ubuntu-export "$CACHE_DIR/ubuntu-24.04.tvm"
+            tart delete ubuntu-export
+            echo "$REMOTE_DIGEST" > "$CACHE_DIR/digest"
+          fi
+
+          cp "$CACHE_DIR/ubuntu-24.04.tvm" ubuntu-tvm/ubuntu-24.04.tvm
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/containers/ubuntu-tvm
+          tags: |
+            type=raw,value={{date 'YYYYMMDD'}}-{{sha}}
+
+      - name: Build and push
+        run: |
+          docker build -t ${{ fromJSON(steps.meta.outputs.json).tags[0] }} ubuntu-tvm/
+          docker push ${{ fromJSON(steps.meta.outputs.json).tags[0] }}

@@ -32,7 +32,7 @@ jobs:
           fi
 
           # Extract unique root folders (excluding hidden folders and files at root)
-          CHANGED_FOLDERS=$(echo "$CHANGED_FILES" | grep '/' | cut -d'/' -f1 | grep -v '^\.' | sort -u)
+          CHANGED_FOLDERS=$(echo "$CHANGED_FILES" | grep '/' | cut -d'/' -f1 | grep -v '^\.' | grep -v '^ubuntu-tvm$' | sort -u)
           FOLDER_COUNT=$(echo "$CHANGED_FOLDERS" | grep -c . || true)
 
           echo "Changed files:"
