@@ -74,3 +74,44 @@ This installs both tart and its softnet dependency. No internet access required.
 - The Docker image is built as `linux/amd64` for corporate registry compatibility (same rationale as ubuntu-tvm).
 - The tap is included as a full Git repo so it can be pushed directly to corporate Git.
 - Formula `sha256` checksums are preserved — they match the bundled tarballs, so `brew install` verification works without changes.
+
+## Verification
+
+To verify the shipper works without internet access, simulate an air-gapped environment on a Mac:
+
+1. **Extract** the shipper contents as described in the admin workflow above.
+
+2. **Serve binaries locally**:
+   ```bash
+   cd tart-shipper/binaries
+   python3 -m http.server 9999 &
+   ```
+
+3. **Rewrite formulas** to use the local server:
+   ```bash
+   ./tart-shipper/rewrite-urls.sh http://localhost:9999
+   ```
+
+4. **Set up a local tap** (no git server needed):
+   ```bash
+   brew tap-new openai/tools
+   cp tart-shipper/tap/Formula/*.rb "$(brew --repo openai/tools)/Formula/"
+   ```
+
+5. **Install with verbose output** to confirm no external requests:
+   ```bash
+   brew install --verbose openai/tools/tart 2>&1 | tee /tmp/brew-install.log
+   ```
+
+6. **Verify** no external URLs were contacted:
+   ```bash
+   grep -iE 'https?://' /tmp/brew-install.log | grep -v localhost
+   ```
+   If this returns nothing, the install is fully self-contained.
+
+7. **Clean up**:
+   ```bash
+   brew uninstall tart softnet
+   brew untap openai/tools
+   kill %1  # stop the HTTP server
+   ```
