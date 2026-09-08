@@ -63,6 +63,7 @@ Docker is used as the transfer vehicle because corporate air-gapped environments
 
 ```bash
 brew tap openai/tools https://corp-git.example.com/openai/homebrew-tools.git
+brew trust openai/tools
 brew install openai/tools/tart
 ```
 
@@ -71,6 +72,7 @@ This installs both tart and its softnet dependency. No internet access required.
 ## Notes
 
 - **softnet** is a hard dependency in the tart formula. It requires macOS Sequoia or later.
+- **Homebrew 6.0+** requires `brew trust openai/tools` before installing from a custom tap.
 - The Docker image is built as `linux/amd64` for corporate registry compatibility (same rationale as ubuntu-tvm).
 - The tap is included as a full Git repo so it can be pushed directly to corporate Git.
 - Formula `sha256` checksums are preserved — they match the bundled tarballs, so `brew install` verification works without changes.
